@@ -1,9 +1,13 @@
 <div class="card-section">
   <mat-card class="item-card" appearance="outlined">
     <mat-card-header class="item-header">
-      <mat-card-title class="item-title" title="{{ product().name }}">{{
-        product().name
-      }}</mat-card-title>
+      <mat-card-title class="item-title" title="{{ product().name }}"
+        >{{ product().name }}
+      </mat-card-title>
+
+      <mat-card-subtitle class="item-subtitle">{{
+        product().productBrand
+      }}</mat-card-subtitle>
       <mat-card-subtitle class="item-subtitle"
         >{{ product().price }}L.E</mat-card-subtitle
       >

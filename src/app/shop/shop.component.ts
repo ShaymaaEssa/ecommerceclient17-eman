@@ -6,6 +6,7 @@ import { IType } from '../shared/models/ProductTypes';
 import { ShopParams } from '../shared/shopParams';
 import { ShopService } from '../core/services/shop.service';
 import { ToastrService } from 'ngx-toastr';
+import { Cart } from '../shared/models/cart';
 
 @Component({
   selector: 'app-shop',
@@ -15,10 +16,12 @@ import { ToastrService } from 'ngx-toastr';
 export class ShopComponent implements OnInit {
   isLoading: boolean = false;
   item: any;
+  items: Cart[] = [];
   value: any;
   @ViewChild('search', { static: false }) searchTerm?: ElementRef;
   products: IProduct[] = [];
-  cartData: IProduct[] = [];
+  brandSelection: IProduct[] = [];
+  cartData: any[] = [];
   brands: IBrand[] = [];
   types: IType[] = [];
   totalCount = 0;
@@ -63,6 +66,14 @@ export class ShopComponent implements OnInit {
     //   this.loading = false;
     // }
   }
+  selectedBrand(brandId: number) {
+    this.shopService.getBrandById(brandId).subscribe((response: any) => {
+      this.brandSelection = response.data;
+      console.log(this.brandSelection, 'brandSelection');
+
+      this.products = this.brandSelection;
+    });
+  }
 
   // 🟢 تحميل البراندات والأنواع مرة واحدة فقط
   // loadFilters(): void {
@@ -104,10 +115,62 @@ export class ShopComponent implements OnInit {
   // }
   toggleSidebar() {}
   addToCart(event: any) {
-    if ('cart' in localStorage) {
-      this.cartData = JSON.parse(localStorage.getItem('cart')!);
+    const token: any = localStorage.getItem('token')!;
+    if (token) {
+      const payload = token.split('.')[1];
+      const decodedPayload = atob(payload);
+      const userData = JSON.parse(decodedPayload);
+      console.log(userData, 'userdata');
+
+      const email =
+        userData[
+          'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'
+        ];
+
+      const baskerItems = {
+        id: String(email),
+        items: [
+          {
+            variantId: event.product.variants[0].id,
+
+            productName: event.product.name,
+            pictureUrl:
+              'https://material.angular.dev/assets/img/examples/shiba2.jpg',
+            price: event.product.price,
+            quantity: event.quantity,
+            colorId: event.product.variants[0].id,
+            sizeId: event.product.variants[0].id,
+          },
+        ],
+      };
+      this.CartService.addToBasket(baskerItems).subscribe(
+        (response: Cart[]) => {
+          if (response) {
+            let existProduct = this.cartData.find(
+              (cartProduct) => cartProduct.id === event.product.id
+            );
+            if (existProduct) {
+              this.toaster.error(
+                'This product is already in your cart',
+                'Error'
+              );
+            } else {
+              this.cartData = JSON.parse(localStorage.getItem('cart')!);
+              this.cartData.push(event);
+              localStorage.setItem('cart', JSON.stringify(this.cartData));
+              this.toaster.success(
+                'product added to cart successfuly',
+                'Success'
+              );
+            }
+          }
+        }
+      );
+    } else {
+      let cart = localStorage.getItem('cart');
+      this.cartData = cart ? JSON.parse(cart) : [];
       let existProduct = this.cartData.find(
-        (cartProduct) => cartProduct.id === event.product.id
+        (cartProduct) => cartProduct.product.id === event.product.id
       );
       if (existProduct) {
         this.toaster.error('This product is already in your cart', 'Error');
@@ -115,13 +178,8 @@ export class ShopComponent implements OnInit {
         this.cartData.push(event);
         console.log(this.cartData, 'cart');
         localStorage.setItem('cart', JSON.stringify(this.cartData));
-
         this.toaster.success('product added to cart successfuly', 'Success');
       }
-    } else {
-      this.cartData.push(event);
-      localStorage.setItem('cart', JSON.stringify(this.cartData));
-      this.toaster.success('product added to cart successfuly', 'Success');
     }
   }
   // 🔸 البحث

@@ -5,7 +5,6 @@ import {
   ChangeDetectionStrategy,
   ViewChild,
   ElementRef,
-  output,
   EventEmitter,
   Output,
 } from '@angular/core';

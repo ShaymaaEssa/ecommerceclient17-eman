@@ -4,9 +4,8 @@ import { BehaviorSubject, map } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from '../../shared/models/user';
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AccountService {
   baseUrl = environment.apiUrl + '/account';
@@ -18,7 +17,7 @@ export class AccountService {
   register(values: any) {
     console.log('Register values:', values);
     return this.http.post<User>(`${this.baseUrl}/register`, values).pipe(
-      map(user => {
+      map((user) => {
         if (user) {
           localStorage.setItem('token', user.token);
           this.currentUserSource.next(user);
@@ -28,9 +27,9 @@ export class AccountService {
     );
   }
 
-  login(values: any) {
+  userLogin(values: any) {
     return this.http.post<User>(`${this.baseUrl}/login`, values).pipe(
-      map(user => {
+      map((user) => {
         if (user) {
           localStorage.setItem('token', user.token);
           this.currentUserSource.next(user);

@@ -25,7 +25,6 @@ export class CartComponent implements OnInit {
   }
   getCartItems() {
     if ('cart' in localStorage) {
-      // this.cartService.getItemFromLocalStorage('cart');
       this.CartItems = JSON.parse(localStorage.getItem('cart')!);
     }
 

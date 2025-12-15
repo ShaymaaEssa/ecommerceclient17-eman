@@ -9,25 +9,19 @@ import { IProduct } from '../../shared/models/products';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ShopService {
- 
-  constructor(private http: HttpClient) {
-
+  constructor(private http: HttpClient) {}
+  getProducts(): Observable<IProduct[]> {
+    return this.http.get<IProduct[]>(
+      `${environment.apiUrl}/Products/paged?lang=en`
+    );
   }
-  getProducts():Observable<IProduct[]> {
-      
-    return  this.http.get<IProduct[]>(`${environment.apiUrl}/Products/paged?lang=en`)
-  
-    }
 
-  getProductById(id:string){
-       return  this.http.get<IProduct[]>(`${environment.apiUrl}/Products/${id}`)
-
-  }  
-
-
+  getProductById(id: string) {
+    return this.http.get<IProduct[]>(`${environment.apiUrl}/Products/${id}`);
+  }
 
   // getProducts(shopParams: ShopParams) {
   //   let params = new HttpParams();
@@ -44,7 +38,6 @@ export class ShopService {
   //       params=params.append('search',shopParams.search);
   //     }
 
-
   //   params = params.append('sort', shopParams.sort);
   //   params = params.append('pageIndex', shopParams.pageNumber.toString());
   //   params = params.append('pageSize', shopParams.pageSize.toString());
@@ -60,12 +53,14 @@ export class ShopService {
   //     )
   // }
 
-  // getProduct(id:number){
-  //   return this.http.get<IProduct>(this.baseUrl+'products/'+id)
-  // }
-  // getBrands() {
-  //   return this.http.get<IBrand[]>(this.baseUrl + 'products/brands');
-  // }
+  getBrands(): Observable<IBrand[]> {
+    return this.http.get<IBrand[]>(`${environment.apiUrl}/products/brands`);
+  }
+  getBrandById(brandId: number): Observable<IProduct[]> {
+    return this.http.get<IProduct[]>(
+      `${environment.apiUrl}/products/paged?BrandId=${brandId}&lang=en`
+    );
+  }
 
   // getTypes() {
   //   return this.http.get<IType[]>(this.baseUrl + 'products/types');

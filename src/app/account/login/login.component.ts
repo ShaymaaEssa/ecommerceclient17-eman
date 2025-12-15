@@ -1,41 +1,51 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AccountService } from '../../core/services/account.service';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   model: any = {};
+  loginForm!: FormGroup;
 
-    loginForm:FormGroup = new FormGroup ({
-    email:new FormControl(null, [Validators.required, Validators.email]    ), 
-    password: new FormControl(null, [Validators.required, Validators.minLength(3)])
-  })
-
-
-  constructor(private accountService: AccountService
-    ,private router: Router
+  constructor(
+    private accountService: AccountService,
+    private router: Router,
+    private fb: FormBuilder,
+    private toaster: ToastrService
   ) {}
-
-  submitForm() {
-    if(this.loginForm.invalid){
-      alert("Fix Login form Errors!");
-      return ;
-    }
-    this.accountService.login(this.loginForm.value).subscribe({
-      next: response => {
-        console.log(' Logged in successfully', response);
-        alert('Welcome back!');
-        this.router.navigateByUrl('/shop'); 
-      },
-      error: err => {
-        alert('Login failed. Please check your credentials and try again.');
-        console.log('Login failed:', err)
-      }
+  ngOnInit(): void {
+    this.initializeUserForm();
+  }
+  initializeUserForm() {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
+  submitForm() {
+    if (this.loginForm.invalid) {
+      this.toaster.error('Fix Login form Errors!', 'Error');
+      return;
+    }
+    this.accountService.userLogin(this.loginForm.value).subscribe({
+      next: (response) => {
+        console.log(' Logged in successfully', response);
+        this.toaster.success('Welcome Back', 'Success');
+        this.router.navigateByUrl('/shop');
+      },
+      error: (err) => {
+        this.toaster.error(
+          'Login failed. Please check your login info and try again.',
+          'Error'
+        );
+        console.log('Login failed:', err);
+      },
+    });
+  }
 }

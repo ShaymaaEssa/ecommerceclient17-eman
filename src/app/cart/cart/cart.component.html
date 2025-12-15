@@ -62,13 +62,18 @@
   </div>
 </div>
 }@else {
-<div class="empty-cart-container">
-  <h1 class="empty-cart-title">Your Shop cart is empty</h1>
-  <a class="shop-product-link" routerLink="/shop">Shop today's Products</a>
-  <input
-    type="text"
-    class="form-control input-login"
-    placeholder="Sign in your account"
-  />
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6 overlay"></div>
+    <div class="col-md-6">
+      <h1 class="empty-cart-title">Your Shop cart is empty</h1>
+      <a class="shop-product-link" routerLink="/shop">Shop today's Products</a>
+      <input
+        type="text"
+        class="form-control input-login"
+        placeholder="Sign in your account"
+      />
+    </div>
+  </div>
 </div>
 }

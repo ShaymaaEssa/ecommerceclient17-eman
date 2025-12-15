@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Cart } from '../../shared/models/cart';
 import { CartItem } from '../../shared/models/cartItem';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/app/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -12,14 +14,18 @@ export class CartService {
   // );
   // cart$ = this.cartSource.asObservable();
 
-  constructor() {}
-  setItemToLocalstorage(key: string, value: any) {
-    localStorage.setItem(key, JSON.stringify(value));
+  constructor(private http: HttpClient) {}
+  addToBasket(items: any): Observable<Cart[]> {
+    return this.http.post<Cart[]>(`${environment.apiUrl}/Basket`, items);
   }
-  getItemFromLocalStorage(key: string): CartItem[] | null {
-    const item = localStorage.getItem(key);
-    return item ? (JSON.parse(item) as CartItem[]) : null;
-  }
+
+  // setItemToLocalstorage(key: string, value: any) {
+  //   localStorage.setItem(key, JSON.stringify(value));
+  // }
+  // getItemFromLocalStorage(key: string): CartItem[] | null {
+  //   const item = localStorage.getItem(key);
+  //   return item ? (JSON.parse(item) as CartItem[]) : null;
+  // }
 
   //   private getCartFromLocalStorage(): Cart | null {
   //     const cart = localStorage.getItem('cart');

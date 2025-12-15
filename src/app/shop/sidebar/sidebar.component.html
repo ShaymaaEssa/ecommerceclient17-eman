@@ -15,8 +15,35 @@
   <div class="sidebar-header">
     <h3 class="sidebar-title">Filter</h3>
   </div>
+  <p-accordion>
+    <p-accordionTab header="Sort">
+      <ul class="menu-list">
+        <li>Active</li>
+        <li>Inactive</li>
+        <li>Pending</li>
+      </ul>
+    </p-accordionTab>
 
-  <ul class="sidebar-menu">
+    <p-accordionTab header="Types">
+      <ul class="menu-list">
+        <li>Category A</li>
+        <li>Category B</li>
+      </ul>
+    </p-accordionTab>
+
+    <p-accordionTab header="Brands" (click)="onBrandSelected()">
+      @for(brand of brand; track $index){
+      <ul class="menu-list">
+        <li (click)="onSelectBrand(brand.id)" [value]="brand.id">
+          {{ brand.name }}
+        </li>
+      </ul>
+
+      }
+    </p-accordionTab>
+  </p-accordion>
+
+  <!-- <ul class="sidebar-menu">
     <li class="sidebar-items">
       <div class="card flex justify-content-center">
         <p-dropdown
@@ -51,5 +78,6 @@
         />
       </div>
     </li>
-  </ul>
+  </ul> -->
+  <!-- </div> -->
 </div>
