@@ -1,6 +1,5 @@
-<nav class="bg-dark text-white p-2 fixed-top ">
+<nav class="bg-dark text-white p-2 fixed-top">
   <div class="d-flex justify-content-between align-items-center">
-
     <!-- Logo -->
     <div routerLink="/">
       <span class="fw-bold fs-5 text-white">E-Shop</span>
@@ -8,30 +7,47 @@
 
     <!-- Navigation links -->
     <div class="d-flex justify-content-center align-items-center">
-      <a class="text-decoration-none me-4 text-white" [routerLink]="['/home']" routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }">
+      <a
+        class="text-decoration-none me-4 text-white"
+        [routerLink]="['/home']"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
         Home
       </a>
-      <a class="text-decoration-none me-3 text-white" routerLink="/shop" routerLinkActive="active">Shop</a>
-      <a class="text-decoration-none me-3 text-white" routerLink="/cart" routerLinkActive="active">Cart</a>
+      <a
+        class="text-decoration-none me-3 text-white"
+        routerLink="/shop"
+        routerLinkActive="active"
+        >Shop</a
+      >
+      <a
+        class="text-decoration-none me-3 text-white"
+        routerLink="/cart"
+        routerLinkActive="active"
+        >Cart</a
+      >
       <a class="text-decoration-none me-3 text-white" href="#">Contact</a>
     </div>
 
     <!-- Right side: cart + login/logout -->
     <div class="d-flex align-items-center gap-3">
-
       <!-- Cart -->
-      <div class="position-relative" routerLink="/cart" style="cursor: pointer;">
-      <i class="fa fa-shopping-cart fs-4 text-white"></i>
-      <span class="cart-no bg-danger text-white rounded-circle px-2 position-absolute top-0 start-100 translate-middle">
-        {{ cartCount }}
-      </span>
-    </div>
+      <div class="position-relative" routerLink="/cart" style="cursor: pointer">
+        <i class="fa fa-shopping-cart fs-4 text-white"></i>
+        <span
+          class="cart-no bg-danger text-white rounded-circle px-2 position-absolute top-0 start-100 translate-middle"
+        >
+          {{ cartCount }}
+        </span>
+      </div>
 
       <!-- Login / Logout -->
       <ng-container *ngIf="currentUser$ | async as user; else loginLink">
         <span class="me-2">👋 {{ user.email }}</span>
-        <button class="btn btn-outline-light btn-sm" (click)="logout()">Logout</button>
+        <button class="btn btn-outline-light btn-sm" (click)="logout()">
+          Logout
+        </button>
       </ng-container>
 
       <ng-template #loginLink>

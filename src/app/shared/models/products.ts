@@ -1,4 +1,5 @@
 export interface IProduct {
+  product: {};
   id: string;
   name: string;
   description: string;
@@ -7,4 +8,5 @@ export interface IProduct {
   productBrand: string;
   pictureUrl: string;
   variants: [{ id: number; color: string; size: string; price: string }];
+  quantity: number;
 }
